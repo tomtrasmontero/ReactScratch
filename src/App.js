@@ -52,7 +52,8 @@ class App extends Component {
   render() {
     // adding style inside the component instead of css className available by JSX
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
@@ -78,13 +79,26 @@ class App extends Component {
           })}
         </div>
       );
+      // dynamic styling, change red when persons are shown
+      style.backgroundColor = 'red';
+
+    }
+
+    // dynamic styling on css classname
+    const classes = [];
+
+    if(this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+
+    if(this.state.persons.length <= 1) {
+      classes.push('bold');
     }
 
     return (
       <div className="App">
         <h1>Hi, I'm a React app</h1>
-        <p>This is really working!</p>
-        {/* same as below with .bind(this)  */}
+        <p className={classes.join(' ')}>This is really working!</p>
         <button
           // pointing style variable above.
           style={style}
@@ -97,4 +111,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default (App);
