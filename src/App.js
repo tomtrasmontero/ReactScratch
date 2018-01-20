@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+// import classes fro App.css to be used inside the component.  Only after
+// adjusting webpack config css loader!
+import classes from './App.css';
 import Person from './Person/Person';
 
 class App extends Component {
@@ -50,18 +52,9 @@ class App extends Component {
   }
 
   render() {
-    // adding style inside the component instead of css className available by JSX
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-    }
-
 // conditional content
     let persons = null;
+    let btnClass = '';
 
     if (this.state.showPersons) {
       persons = (
@@ -79,29 +72,28 @@ class App extends Component {
           })}
         </div>
       );
-      // dynamic styling, change red when persons are shown
-      style.backgroundColor = 'red';
-
+      btnClass = classes.Red;
     }
 
     // dynamic styling on css classname
-    const classes = [];
+    const assignedClasses = [];
 
     if(this.state.persons.length <= 2) {
-      classes.push('red');
+      assignedClasses.push( classes.red );
     }
 
     if(this.state.persons.length <= 1) {
-      classes.push('bold');
+      assignedClasses.push( classes.bold );
     }
 
     return (
-      <div className="App">
+      // stores unique classes for this particular component
+      <div className={classes.App}>
         <h1>Hi, I'm a React app</h1>
-        <p className={classes.join(' ')}>This is really working!</p>
+        <p className={assignedClasses.join(' ')}>This is really working!</p>
         <button
           // pointing style variable above.
-          style={style}
+          className={btnClass}
           onClick={this.togglePersonsHandler}
           >Toggle Persons
         </button>

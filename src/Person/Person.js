@@ -1,10 +1,10 @@
 import React from 'react';
-import './person.css';
+import classes from './person.css';
 
 const person = (props) => {
 
   return (
-    <div className="Person">
+    <div className={classes.Person}>
       <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
       {/* props.children takes any element between the opening and closing tag */}
       <p>{props.children}</p>
