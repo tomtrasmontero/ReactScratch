@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+// PureComponent is same as component with shouldComponentUpdate build in
+import React, { PureComponent } from 'react';
 // import classes fro App.css to be used inside the component.  Only after
 // adjusting webpack config css loader!
 import classes from './App.css';
 import Person from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../hoc/WithClass';
 
 // error boundary new in react 16+
 // import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
-class App extends Component {
+class App extends PureComponent {
   constructor(props) {
     super(props);
     console.log('[App.js]',props);
@@ -20,6 +22,7 @@ class App extends Component {
       ],
       otherState: 'some other value',
       showPersons: false,
+      toggleClicked: 0,
     }
   }
 
@@ -32,10 +35,11 @@ class App extends Component {
   }
 
   // stops the rendering if it return false
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('UPDATE APP.js inside shouldComponentUpdate', nextProps, nextState);
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('UPDATE APP.js inside shouldComponentUpdate', nextProps, nextState);
+  //   return nextState.persons !== this.state.persons ||
+  //   nextState.showPersons !== this.state.showPersons;
+  // }
 
   componentWillUpdate(nextProps, nextState) {
     console.log('UPDATE APP.js inside componentWillUpdate', nextProps, nextState);
@@ -89,7 +93,15 @@ class App extends Component {
 
   togglePersonsHandler = () => {
     const doesShow = this.state.showPersons;
-    this.setState({showPersons: !doesShow});
+    // setState can take a arg of prevState and props
+    // always use this instead of calling this.state inside setState because
+    // the state might not correctly the reflect the most current state
+    this.setState((prevState, props) => {
+      return {
+        showPersons: !doesShow,
+          toggleClicked: prevState.toggleClicked + 1
+        }
+    });
   }
 
   render() {
@@ -108,8 +120,9 @@ class App extends Component {
     }
 
     return (
-      // stores unique classes for this particular component
-      <div className={classes.App}>
+      // stores unique classes for this particular component using HOC
+      <WithClass classes={classes.App}>
+        <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
         <Cockpit
           appTitle={this.props.title}
           showPersons={this.state.showPersons}
@@ -117,7 +130,7 @@ class App extends Component {
           clicked={this.togglePersonsHandler}
         />
         {persons}
-      </div>
+      </WithClass>
     );
   }
 }

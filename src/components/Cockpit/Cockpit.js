@@ -1,15 +1,16 @@
 import React from 'react';
 
 import classes from './Cockpit.css';
+import Aux from '../../hoc/Aux';
 
 const cockpit = (props) => {
   // dynamic styling on css classname
   const assignedClasses = [];
-  let btnClass = '';
+  let btnClass = classes.Button;
 
   // add css class if person is showing or not
   if(props.showPersons) {
-    btnClass = classes.Red;
+    btnClass = [classes.Button, classes.Red].join(' ');
   }
 
   if(props.persons.length <= 2) {
@@ -21,7 +22,7 @@ const cockpit = (props) => {
   }
 
   return (
-    <div className={classes.Cockpit}>
+    <Aux>
       <h1>{props.appTitle}</h1>
       <p className={assignedClasses.join(' ')}>This is really working!</p>
       <button
@@ -30,7 +31,7 @@ const cockpit = (props) => {
         onClick={props.clicked}
         >Toggle Persons
       </button>
-    </div>
+    </Aux>
   );
 }
 
